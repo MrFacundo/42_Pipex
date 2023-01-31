@@ -9,4 +9,5 @@
 #include <sys/types.h> // fork, wait
 #include <sys/wait.h>  // wait, waitpid
 
+int	pipex();
 #endif

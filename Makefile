@@ -1,10 +1,10 @@
 NAME			= pipex.a
 
-SRCS			= pipex.c
+SRCS			= pipex
 					
 OBJS			= $(SRCS:=.o)
 
-LIBFT_OBJS	= libft/*.o
+LIBFT_OBJS	= 42_Libft/*.o
 
 CC				= gcc
 RM				= rm -f
@@ -20,14 +20,14 @@ $(NAME):		$(OBJS) libft
 
 
 libft:
-				make -C libft
+				make -C 42_Libft
 
 clean:
 				$(RM) $(OBJS)
-				make -C libft clean
+				make -C 42_Libft clean
 
 fclean:			clean
-					$(RM) $(NAME) libft/libft.a
+					$(RM) $(NAME) 42_Libft/libft.a
 
 re:					fclean $(NAME)
 

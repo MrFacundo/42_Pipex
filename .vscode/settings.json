@@ -1,0 +1,7 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss",
+		"*.js": "javascriptreact",
+		"libft.h": "c"
+	}
+}
