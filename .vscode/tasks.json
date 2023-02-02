@@ -2,10 +2,9 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc build active file",
+            "label": "C/C++: gcc -g (debug) build",
             "command": "/usr/bin/gcc",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
                 "*.c",
                 "42_Libft/*.c",

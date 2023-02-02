@@ -9,5 +9,6 @@
 #include <sys/types.h> // fork, wait
 #include <sys/wait.h>  // wait, waitpid
 
-int	pipex();
+int	pipex(char *fd_in, char *process_one, char *process_two, char *fd_out);
+
 #endif

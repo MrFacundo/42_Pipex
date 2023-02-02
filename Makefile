@@ -8,7 +8,7 @@ LIBFT_OBJS		= 42_Libft/*.o
 
 CC				= gcc
 RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			=  -Werror
 
 # --- COLORS ---
 NONE='\033[0m'
