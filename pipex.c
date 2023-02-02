@@ -3,5 +3,7 @@
 
 int	pipex()
 {
-	return (ft_isdigit(42));
+	int result;
+	result = (ft_isdigit('2'));
+	return result;
 }

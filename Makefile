@@ -5,55 +5,60 @@ SRCS			= pipex
 OBJS			= $(SRCS:=.o)
 
 LIBFT_OBJS		= 42_Libft/*.o
-FT_PRINTF_OBJS	= 42_ft_printf/*.o
 
 CC				= gcc
 RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror
 
+# --- COLORS ---
+NONE='\033[0m'
+GRAY='\033[2;37m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+MAGENTA='\033[35m'
+
+
 all:			$(NAME)
 
-$(NAME):		$(OBJS) ft_printf libft
-				ar rcs $@ $(OBJS) $(FT_PRINTF_OBJS) $(LIBFT_OBJS)
-				@echo "\033[32mPipex Compiled! ᕦ(\033[31m♥\033[32m_\033[31m♥\033[32m)ᕤ\n"
+$(NAME):		$(OBJS) libft
+				ar rcs $@ $(OBJS) $(LIBFT_OBJS)
+				@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ\n" $(NONE)
 
 %.o: %.c
 				$(CC) -c $(CFLAGS) $?
 
-ft_printf:
-				make -C 42_ft_printf
 
 libft:
+				@echo $(GRAY) "- Compiling Libft..." $(NONE)
 				make -C 42_Libft
 
 clean:
 				$(RM) $(OBJS)
 				make -C 42_Libft clean
-				make -C 42_ft_printf clean
-				@echo "\n\033[31mCleaning done! ⌐(ಠ۾ಠ)¬\n]"
+				@echo "\n$(RED)Cleaning done! ⌐(ಠ۾ಠ)¬\n" $(NONE)
 
 
 fclean:			clean
 				$(RM) $(NAME) 42_Libft/libft.a
 
 compile_main:
-				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a 42_ft_printf/libftprintf.a -o exe 
-				./exe
+				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o exe 
 
 re:				fclean $(NAME)
 
 party:
 					@printf "\033c"
-					@echo "\n\033[35m♪┏(・o･)┛♪"
+					@echo "\n$(MAGENTA)♪┏(・o･)┛♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "\033[1;33m♪┗(・o･)┓♪"
+					@echo "$(YELLOW)♪┗(・o･)┓♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "\n\033[36m♪┏(・o･)┛♪"
+					@echo "\n$(MAGENTA)♪┏(・o･)┛♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "\033[34m♪┗(・o･)┓♪\n"
+					@echo "$(YELLOW)♪┗(・o･)┓♪\n"
 
 
-.PHONY:			all ft_printf libft clean fclean re
+.PHONY:			all libft clean fclean re
