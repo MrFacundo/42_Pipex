@@ -23,7 +23,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS) libft
 				ar rcs $@ $(OBJS) $(LIBFT_OBJS)
-				@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ\n" $(NONE)
+				@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ" $(NONE)
 
 %.o: %.c
 				$(CC) -c $(CFLAGS) $?
@@ -44,6 +44,7 @@ fclean:			clean
 
 compile_main:
 				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o exe 
+				@echo "\n$(RED)Executable compiled! ⌐(ಠ۾ಠ)¬\n" $(NONE)
 
 re:				fclean $(NAME)
 
