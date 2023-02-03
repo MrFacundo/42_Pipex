@@ -1,40 +1,50 @@
 #include "pipex.h"
 #include "42_Libft/libft.h"
 
-int	pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
+int pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
 {
 
-	int		fd1;
-	char	*line;
-	char	*path;
-	char	**process_contents;
-	char 	**argv;
-	int	i;
-	int	j;
-	char	*second_string;
+	int fd1;
+	char *line;
+	char *path;
+	char **argv;
+	int i;
+	pid_t pid;
+	int infile_fd;
+	int saved_stdout_fd;
 
-    char *envp[] =
-    {
-        "HOME=/",
-        "PATH=/bin:/usr/bin",
-        0
-    };
+	char *envp[] =
+		{
+			"HOME=/",
+			"PATH=/bin:/usr/bin",
+			0
+		};
+
 	fd1 = open(fd_in, O_RDONLY);
 	line = ft_get_next_line(fd1);
-	process_contents = ft_split(process_one, ' ');
-
-	argv = process_contents;
-	second_string = argv[1];
+	argv = ft_split(process_one, ' ');
 	i = 0;
-	while (process_contents[i])
+	while (argv[i])
 		i++;
-	argv[i] = line;
-	i++;
+	argv[i++] = line;
 	argv[i] = 0;
-	j = 0;
-	path = ft_strjoin("/bin/", process_contents[0]);
-	execve(path, argv, envp);
+	path = ft_strjoin("/bin/", argv[0]);
 
-	// printf("\nfd_in: %s\nprocess_one: %s\nprocess_two: %s\nfd_out: %s\n", fd_in, process_one, process_two, fd_out);
+	infile_fd = open(fd_out, O_CREAT | O_TRUNC | O_WRONLY);
+	// saved_stdout_fd = dup(STDOUT_FILENO);
+
+	pid = fork();
+	if (pid == -1)
+		return (-1);
+	if (pid == 0)
+	{
+		dup2(infile_fd, STDOUT_FILENO);
+		execve(path, argv, envp);
+	}
+	wait(NULL);
+	// dup2(saved_stdout_fd, STDOUT_FILENO);
+
+	printf("Done executing %s", process_one);
+
 	return 0;
 }

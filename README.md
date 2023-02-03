@@ -1,2 +1,2 @@
 # 42_Pipex
-Unix processes, redirections and pipes in C
+Unix processes, system calls, redirections and pipes in C
