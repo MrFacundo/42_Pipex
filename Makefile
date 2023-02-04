@@ -38,13 +38,12 @@ clean:
 				make -C 42_Libft clean
 				@echo "\n$(RED)Cleaning done! ⌐(ಠ۾ಠ)¬\n" $(NONE)
 
-
 fclean:			clean
 				$(RM) $(NAME) 42_Libft/libft.a
 
-compile_main:
+l_main:
 				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o exe 
-				@echo "\n$(RED)Executable compiled! ⌐(ಠ۾ಠ)¬\n" $(NONE)
+				@echo "$(GRAY)Executable compiled! (=ʘᆽʘ=)∫" $(NONE)
 
 re:				fclean $(NAME)
 
