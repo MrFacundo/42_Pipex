@@ -1,13 +1,12 @@
 #include "pipex.h"
 #include "42_Libft/libft.h"
 
-int pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
+int pipex(char *infile, char *process_one, char *process_two, char *outfile)
 {
 	int pipe_fd[2];
 
 	int		infile_fd;
 	int		outfile_fd;
-	char	*line;
 	char	*path;
 	char	**argv_one;
 	char	**argv_two;
@@ -27,16 +26,11 @@ int pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
 	if (pid == -1) return (-1);
 	if (pid == 0)
 	{
-				// Read infile
-		infile_fd = open(fd_in, O_RDONLY);
-		if (infile_fd = -1)
-		{
-			fprintf(stderr, "Error: %s\n", strerror(errno));
-			exit(-1);
-		}
-		line = ft_get_next_line(infile_fd);
+				// Open infile, route STDIN to infile
+		infile_fd = open(infile, O_RDONLY);
+		dup2(infile_fd, STDIN_FILENO);
 				// Parse process one
-		argv_one = parse_process_string(process_one, line);
+		argv_one = parse_process_string(process_one);
 				// Create path
 		path = ft_strjoin("/bin/", argv_one[0]);
 				// Route STDOUT to write end of pipe, exec process
@@ -51,10 +45,10 @@ int pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
 	if (pid2 == 0)
 	{
 				// Open outfile, route STDOUT to outfile
-		outfile_fd = open(fd_out, O_CREAT | O_TRUNC | O_WRONLY);
+		outfile_fd = open(outfile, O_CREAT | O_TRUNC | O_WRONLY);
 		dup2(outfile_fd, STDOUT_FILENO);
 				// Parse process two
-		argv_two = parse_process_string(process_two, 0);
+		argv_two = parse_process_string(process_two);
 				// Create path
 		path = ft_strjoin("/bin/", argv_two[0]);
 				// Route STDIN to read end of pipe, exec process
@@ -67,11 +61,11 @@ int pipex(char *fd_in, char *process_one, char *process_two, char *fd_out)
 	close(pipe_fd[1]);
 				// End main process
 	wait(NULL);
-	printf("Done executing %s | %s", process_one, process_two);
+	printf("Done executing < %s %s | %s > %s", infile, process_one, process_two, outfile);
 	return 0;
 }
 
-char	**parse_process_string(char	*process_string, char *arg)
+char	**parse_process_string(char	*process_string)
 {
 	char	**argv;
 	int i;
@@ -80,8 +74,6 @@ char	**parse_process_string(char	*process_string, char *arg)
 	i = 0;
 	while (argv[i])
 		i++;
-	if (arg)
-		argv[i++] = arg;
 	argv[i] = 0;
 	return (argv);
 }

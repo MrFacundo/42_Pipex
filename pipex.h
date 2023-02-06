@@ -11,6 +11,6 @@
 #include <errno.h>  // errno
 
 int		pipex(char *fd_in, char *process_one, char *process_two, char *fd_out);
-char	**parse_process_string(char	* process_string, char *arg);
+char	**parse_process_string(char	* process_string);
 
 #endif
