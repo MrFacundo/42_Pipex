@@ -18,13 +18,9 @@ int main(int argc, char *argv[])
 
 		return pipex(fd_in, process_one, process_two, fd_out);
 	}
-	else if (argc > 4)
+	else 
 	{
-		printf("Too many arguments supplied.\n");
-	}
-	else
-	{
-		printf("Too few arguments supplied.\n");
+		printf("Usage: ./pipex filein cmd1 cmd2 fileout\n");
 	}
 	return (0);
 }

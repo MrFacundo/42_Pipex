@@ -8,7 +8,7 @@ LIBFT_OBJS		= 42_Libft/*.o
 
 CC				= gcc
 RM				= rm -f
-CFLAGS			=  -Werror
+CFLAGS			=  -Wall -Werror -Wextra
 
 # --- COLORS ---
 NONE='\033[0m'
@@ -42,7 +42,7 @@ fclean:			clean
 				$(RM) $(NAME) 42_Libft/libft.a
 
 l_main:
-				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o exe 
+				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o pipex 
 				@echo "$(GRAY)Executable compiled! (=ʘᆽʘ=)∫" $(NONE)
 
 re:				fclean $(NAME)

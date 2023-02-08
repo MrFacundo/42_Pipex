@@ -12,7 +12,7 @@ int pipex(char *infile, char *process_one, char *process_two, char *outfile)
 	char	**argv_two;
 	pid_t	pid;
 	pid_t	pid2;
-	int		saved_stdout_fd;
+	// int		saved_stdout_fd;
 
 	char *envp[] =
 		{
