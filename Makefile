@@ -1,64 +1,76 @@
-NAME			= pipex.a
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: facundo <facundo@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/02/08 17:08:06 by facundo           #+#    #+#              #
+#    Updated: 2023/02/08 17:36:27 by facundo          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRCS			= pipex
-					
-OBJS			= $(SRCS:=.o)
+NAME	= pipex
+# NAME_B  = pipex_bonus
 
-LIBFT_OBJS		= 42_Libft/*.o
+SRCS 	= srcs/pipex.c
+OBJS 	= ${SRCS:.c=.o}
+MAIN	= srcs/pipex.c
 
-CC				= gcc
-RM				= rm -f
-CFLAGS			=  -Wall -Werror -Wextra
+# SRCS_B	= srcs/pipex_bonus.c srcs/utils.c srcs/utils_bonus.c
+# OBJS_B	= ${SRCS_B:.c=.o}
+# MAIN_B	= srcs/pipex_bonus.c
 
-# --- COLORS ---
-NONE='\033[0m'
-GRAY='\033[2;37m'
-RED='\033[31m'
-GREEN='\033[32m'
-YELLOW='\033[33m'
-MAGENTA='\033[35m'
+HEADER	= -Iincludes
 
+CC 		= gcc
+CFLAGS 	= -Wall -Wextra -Werror -g
 
-all:			$(NAME)
+.c.o:		%.o : %.c
+					@gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
 
-$(NAME):		$(OBJS) libft
-				ar rcs $@ $(OBJS) $(LIBFT_OBJS)
-				@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ" $(NONE)
+all: 		${NAME}
 
-%.o: %.c
-				$(CC) -c $(CFLAGS) $?
+${NAME}:	${OBJS}
+					@echo "\033[33m----Compiling lib----"
+					@make re -C ./libft
+					@$(CC) ${OBJS} -Llibft -lft -o ${NAME}
+					@echo "\033[32mPipex Compiled! ᕦ(\033[31m♥\033[32m_\033[31m♥\033[32m)ᕤ\n"
 
 
-libft:
-				@echo $(GRAY) "- Compiling Libft..." $(NONE)
-				make -C 42_Libft
+# bonus:		${NAME_B}
+
+# ${NAME_B}:	${OBJS_B}
+# 					@echo "\033[33m----Compiling lib----"
+# 					@make re -C ./libft
+# 					@$(CC) ${OBJS_B} -Llibft -lft -o ${NAME_B}
+# 					@echo "\033[32mPipex Bonus Compiled! ᕦ(\033[31m♥\033[32m_\033[31m♥\033[32m)ᕤ\n"
 
 clean:
-				$(RM) $(OBJS)
-				make -C 42_Libft clean
-				@echo "\n$(RED)Cleaning done! ⌐(ಠ۾ಠ)¬\n" $(NONE)
+					@make clean -C ./libft
+					@rm -f ${OBJS} ${OBJS_B}
 
-fclean:			clean
-				$(RM) $(NAME) 42_Libft/libft.a
+fclean: 	clean
+					@make fclean -C ./libft
+					@rm -f $(NAME)
+					@rm -f ${NAME}
+					@echo "\n\033[31mDeleting EVERYTHING! ⌐(ಠ۾ಠ)¬\n"
 
-l_main:
-				$(CC) $(CFLAGS) main.c pipex.a 42_Libft/libft.a -o pipex 
-				@echo "$(GRAY)Executable compiled! (=ʘᆽʘ=)∫" $(NONE)
+re:			fclean all
 
-re:				fclean $(NAME)
+# re_bonus:	fclean bonus
 
 party:
 					@printf "\033c"
-					@echo "\n$(MAGENTA)♪┏(・o･)┛♪"
+					@echo "\n\033[35m♪┏(・o･)┛♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "$(YELLOW)♪┗(・o･)┓♪"
+					@echo "\033[1;33m♪┗(・o･)┓♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "\n$(MAGENTA)♪┏(・o･)┛♪"
+					@echo "\n\033[36m♪┏(・o･)┛♪"
 					@sleep 1
 					@printf "\033c"
-					@echo "$(YELLOW)♪┗(・o･)┓♪\n"
+					@echo "\033[34m♪┗(・o･)┓♪\n"
 
-
-.PHONY:			all libft clean fclean re
+.PHONY: all clean fclean re re_bonus bonus party

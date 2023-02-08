@@ -7,8 +7,8 @@
             "args": [
                 "-g",
                 "*.c",
-                "42_Libft/*.c",
-                "42_Libft/libft.a",
+                "libft/*.c",
+                "libft/libft.a",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
