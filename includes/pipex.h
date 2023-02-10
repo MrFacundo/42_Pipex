@@ -17,7 +17,7 @@
 # define ERR_FORK "Pipe"
 # define ERR_CMD "Command not found\n"
 
-int		pipex(char *fd_in, char *process_one, char *process_two, char *fd_out);
+int		pipex(char *fd_in, char *process_one, char *process_two, char *fd_out, char *envp[]);
 char	**parse_process_string(char	* process_string);
 
 #endif

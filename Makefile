@@ -6,7 +6,7 @@
 #    By: facundo <facundo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/08 17:08:06 by facundo           #+#    #+#              #
-#    Updated: 2023/02/08 17:36:27 by facundo          ###   ########.fr        #
+#    Updated: 2023/02/10 14:58:03 by facundo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,12 @@ MAIN	= srcs/pipex.c
 HEADER	= -Iincludes
 
 CC 		= gcc
-CFLAGS 	= -Wall -Wextra -Werror -g
+CFLAGS_DEV 	= -g
+CFLAGS_PROD 	= -Wall -Wextra -Werror -g
+
 
 .c.o:		%.o : %.c
-					@gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
+					@gcc ${CFLAGS_DEV} ${HEADER} -c $< -o $(<:.c=.o)
 
 all: 		${NAME}
 

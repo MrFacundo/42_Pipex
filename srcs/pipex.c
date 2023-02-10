@@ -6,7 +6,40 @@ void	error(char *err)
 	perror(err);
 	exit (1);
 }
-int pipex(char *infile, char *process_one, char *process_two, char *outfile)
+
+char	*get_path(char *envp[], char *process)
+{
+	char	**paths;
+	char	*path_string;
+	char	*path;
+
+	while (*envp)
+	{
+		if (ft_strnstr(*envp, "PATH=", 5))
+		{
+			path_string = ft_substr(*envp, 5, ft_strlen(*envp) - 5);
+			break;
+		}
+		envp++;
+	}
+	paths = ft_split(path_string, ':');
+	free(path_string);
+	process = ft_strjoin("/", process);
+	while (*paths)
+	{
+		path = ft_strjoin(*paths, process);
+		if (!access(path, F_OK))
+			break;
+		paths++;
+	}
+	if (!*paths)
+		error("ERR_CMD");
+	return (path);
+}
+
+
+
+int pipex(char *infile, char *process_one, char *process_two, char *outfile, char *envp[])
 {
 	int pipe_fd[2];
 
@@ -17,13 +50,7 @@ int pipex(char *infile, char *process_one, char *process_two, char *outfile)
 	char	**argv_two;
 	pid_t	pid;
 	pid_t	pid2;
-	// int		saved_stdout_fd;
 
-	char *envp[] =
-		{
-			"HOME=/",
-			"PATH=/bin:/usr/bin",
-			0};
 				// Pipe
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
@@ -41,7 +68,9 @@ int pipex(char *infile, char *process_one, char *process_two, char *outfile)
 				// Parse process one
 		argv_one = parse_process_string(process_one);
 				// Create path
-		path = ft_strjoin("/bin/", argv_one[0]);
+		path = get_path(envp, argv_one[0]);
+		// path = ft_strjoin("/bin/", argv_one[0]);
+
 				// Route STDOUT to write end of pipe, exec process
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[0]);
@@ -61,7 +90,7 @@ int pipex(char *infile, char *process_one, char *process_two, char *outfile)
 				// Parse process two
 		argv_two = parse_process_string(process_two);
 				// Create path
-		path = ft_strjoin("/bin/", argv_two[0]);
+		path = get_path(envp, argv_two[0]);
 				// Route STDIN to read end of pipe, exec process
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
@@ -90,7 +119,7 @@ char	**parse_process_string(char	*process_string)
 }
 
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[],  char *envp[])
 {
 	char	*fd_in;
 	char	*process_one;
@@ -105,7 +134,7 @@ int main(int argc, char *argv[])
 		process_two = argv[3];
 		fd_out = argv[4];
 
-		return pipex(fd_in, process_one, process_two, fd_out);
+		return pipex(fd_in, process_one, process_two, fd_out, envp);
 	}
 	else 
 		error(ERR_INPUT);
