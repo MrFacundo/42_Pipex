@@ -6,7 +6,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
-			"args": ["infile", "ls -l", "wc -w", "d"],
+			"args": ["input","grep Hello ", "awk '{count++} END {print count}'", "output"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

@@ -6,9 +6,9 @@
             "command": "/usr/bin/gcc",
             "args": [
                 "-g",
-                "*.c",
-                "libft/*.c",
-                "libft/libft.a",
+                "../srcs/*.c",
+                "../libft/*.c",
+                "../libft/libft.a",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
