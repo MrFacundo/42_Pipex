@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/12 13:07:02 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/02/12 15:40:08 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	process_two(char *argv[], char *envp[], int pipe_fd[])
 	char	**argv_two;
 	char	*path;
 
-	outfile_fd = open(argv[4], O_CREAT | O_TRUNC | O_RDWR, 0000644);
+	outfile_fd = open(argv[4], O_CREAT | O_TRUNC | O_RDWR, 0000664);
 	if (outfile_fd == -1)
 		error(ERR_OUTFILE);
 	dup2(outfile_fd, STDOUT_FILENO);

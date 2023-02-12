@@ -35,7 +35,8 @@ clean:
 					@make -C ./libft clean
 
 
-fclean: 			@echo "${RED}Deleting EVERYTHING! ( ͡° ͜ʖ ͡°) ${NONE}\n"
+fclean: 			
+					@echo "${RED}Deleting EVERYTHING! ( ͡° ͜ʖ ͡°) ${NONE}\n"
 					$(RM) $(OBJS)
 					@make fclean -C ./libft
 
