@@ -1,142 +1,79 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
+/*   Updated: 2023/02/12 13:07:02 by ftroiter         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 #include "../libft/libft.h"
 
-void	error(char *err)
+int	main(int argc, char *argv[], char *envp[])
 {
-	perror(err);
-	exit (1);
+	if (argc == 5)
+		return (pipex(argv, envp));
+	else
+		error(ERR_INPUT);
+	return (0);
 }
 
-char	*get_path(char *envp[], char *process)
+int	pipex(char *argv[], char *envp[])
 {
-	char	**paths;
-	char	*path_string;
-	char	*path;
-
-	while (*envp)
-	{
-		if (ft_strnstr(*envp, "PATH=", 5))
-		{
-			path_string = ft_substr(*envp, 5, ft_strlen(*envp) - 5);
-			break;
-		}
-		envp++;
-	}
-	paths = ft_split(path_string, ':');
-	free(path_string);
-	process = ft_strjoin("/", process);
-	while (*paths)
-	{
-		path = ft_strjoin(*paths, process);
-		if (!access(path, F_OK))
-			break;
-		paths++;
-	}
-	if (!*paths)
-		error("ERR_CMD");
-	return (path);
-}
-
-
-
-int pipex(char *infile, char *process_one, char *process_two, char *outfile, char *envp[])
-{
-	int pipe_fd[2];
-
-	int		infile_fd;
-	int		outfile_fd;
-	char	*path;
-	char	**argv_one;
-	char	**argv_two;
+	int		pipe_fd[2];
 	pid_t	pid;
-	pid_t	pid2;
 
-				// Pipe
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
-				// Fork
 	pid = fork();
 	if (pid == -1)
 		error(ERR_FORK);
 	if (pid == 0)
-	{
-				// Open infile, route STDIN to infile
-		infile_fd = open(infile, O_RDONLY, 0777);
-		if (infile_fd == -1)
-			error(ERR_INFILE);
-		dup2(infile_fd, STDIN_FILENO);
-				// Parse process one
-		argv_one = parse_process_string(process_one);
-				// Create path
-		path = get_path(envp, argv_one[0]);
-		// path = ft_strjoin("/bin/", argv_one[0]);
-
-				// Route STDOUT to write end of pipe, exec process
-		dup2(pipe_fd[1], STDOUT_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		execve(path, argv_one, envp);
-	}
-				// Fork
-	pid2 = fork();
-	if (pid2 == -1)	return (-1);
-	if (pid2 == 0)
-	{
-				// Open outfile, route STDOUT to outfile
-		outfile_fd = open(outfile, O_CREAT | O_TRUNC | O_RDWR, 0000644);
-		if (outfile_fd == -1)
-			error(ERR_OUTFILE);
-		dup2(outfile_fd, STDOUT_FILENO);
-				// Parse process two
-		argv_two = parse_process_string(process_two);
-				// Create path
-		path = get_path(envp, argv_two[0]);
-				// Route STDIN to read end of pipe, exec process
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		execve(path, argv_two, envp);
-	}
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-				// End main process
+		process_one(argv, envp, pipe_fd);
+	pid = fork();
+	if (pid == -1)
+		error(ERR_FORK);
+	if (pid == 0)
+		process_two(argv, envp, pipe_fd);
+	close_pipe_ends(pipe_fd);
 	wait(NULL);
-	// printf("Done executing < %s %s | %s > %s", infile, process_one, process_two, outfile);
-	return 0;
-}
-
-char	**parse_process_string(char	*process_string)
-{
-	char	**argv;
-	int i;
-
-	argv = ft_split(process_string, ' ');
-	i = 0;
-	while (argv[i])
-		i++;
-	argv[i] = 0;
-	return (argv);
-}
-
-
-int main(int argc, char *argv[],  char *envp[])
-{
-	char	*fd_in;
-	char	*process_one;
-	char	*process_two;
-	char	*fd_out;
-
-	if (argc == 5)
-	{
-
-		fd_in = argv[1];
-		process_one = argv[2];
-		process_two = argv[3];
-		fd_out = argv[4];
-
-		return pipex(fd_in, process_one, process_two, fd_out, envp);
-	}
-	else 
-		error(ERR_INPUT);
 	return (0);
+}
+
+void	process_one(char *argv[], char *envp[], int pipe_fd[])
+{
+	int		infile_fd;
+	char	**argv_one;
+	char	*path;
+
+	infile_fd = open(argv[1], O_RDONLY, 0777);
+	if (infile_fd == -1)
+		error(ERR_INFILE);
+	dup2(infile_fd, STDIN_FILENO);
+	argv_one = parse_process_string(argv[2]);
+	path = get_path(envp, argv_one[0]);
+	dup2(pipe_fd[1], STDOUT_FILENO);
+	close_pipe_ends(pipe_fd);
+	execve(path, argv_one, envp);
+}
+
+void	process_two(char *argv[], char *envp[], int pipe_fd[])
+{
+	int		outfile_fd;
+	char	**argv_two;
+	char	*path;
+
+	outfile_fd = open(argv[4], O_CREAT | O_TRUNC | O_RDWR, 0000644);
+	if (outfile_fd == -1)
+		error(ERR_OUTFILE);
+	dup2(outfile_fd, STDOUT_FILENO);
+	argv_two = parse_process_string(argv[3]);
+	path = get_path(envp, argv_two[0]);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close_pipe_ends(pipe_fd);
+	execve(path, argv_two, envp);
 }

@@ -3,6 +3,7 @@
 		"*.css": "tailwindcss",
 		"*.js": "javascriptreact",
 		"pipex.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"stdio.h": "c"
 	}
 }
