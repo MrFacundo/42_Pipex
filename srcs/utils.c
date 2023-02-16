@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/14 16:06:40 by facundo          ###   ########.fr       */
+/*   Updated: 2023/02/16 17:04:28 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	close_pipe_ends(int pipe_fd[])
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 }
+
+// You are entering quotes hell
 
 static	size_t pipex_count_tokens(char const *s, char c)
 {
@@ -44,6 +46,14 @@ static	size_t pipex_count_tokens(char const *s, char c)
 				if (*s == '\'')
 					s++;
 			}
+			if (*s == '\"' && ++count)
+			{
+				s++;
+				while (*s && *s != '\"')
+					s++;
+				if (*s == '\"')
+					s++;
+			}
 			else
 			{
 				count++;
@@ -54,6 +64,8 @@ static	size_t pipex_count_tokens(char const *s, char c)
 	}
 	return (count);
 }
+
+// You are entering quotes hell, again
 
 char **ft_pipex_split(char const *s, char c)
 {
@@ -82,7 +94,18 @@ char **ft_pipex_split(char const *s, char c)
 					++s;
 				result[i++] = ft_substr(s - len, 0, len);
 			}
-			if (*s && *s != '\'')
+			if (*s && *s == '\"')
+			{
+				while (*s == '\"')
+					s++;
+				len = 2;
+				while (*s && *s != '\"' && ++len)
+					++s;
+				if (*s == '\"')
+					++s;
+				result[i++] = ft_substr(s - len, 0, len);
+			}
+			if (*s && *s != '\'' && *s != '\"')
 			{
 				len = 0;
 				while (*s && *s != c && ++len)

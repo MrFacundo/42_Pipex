@@ -6,7 +6,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
-			"args": ["infile","awk 'ab''cd'", "sed    \"s/And/But/\"", "outfile.txt"],
+			"args": ["infile","awk \\\"ab\\\" cd", "sed    \"s/And/But/\"", "outfile.txt"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
