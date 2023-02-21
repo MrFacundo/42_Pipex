@@ -2,6 +2,7 @@ NAME			= pipex
 
 SRCS 			= srcs/pipex.c srcs/utils.c
 OBJS 			= $(SRCS:.c=.o)
+LIBFT_DIR 		= ./libft
 
 HEADER			= -Iincludes
 CC 				= gcc
@@ -19,13 +20,13 @@ MAGENTA=\033[35m
 
 # --- RULES ---
 .c.o:		%.o : %.c
-			gcc $(CFLAGS_PROD) $(HEADER) -c $< -o $(<:.c=.o)
+			$(CC) $(CFLAGS_PROD) $(HEADER) -c $< -o $(<:.c=.o)
 
 all: 		$(NAME)
 
-$(NAME):	$(OBJS) libft
+$(NAME):	$(OBJS)
 			@echo  "$(GRAY)----Compiling Libft----$(NONE)"
-			make -C ./libft
+			make -C $(LIBFT_DIR)
 			@echo  "$(GRAY)----Compiling Pipex----$(NONE)"
 			$(CC) $(OBJS) -Llibft -lft -o $(NAME)
 			@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ$(NONE)\n"
@@ -34,17 +35,16 @@ $(NAME):	$(OBJS) libft
 clean:
 			@echo "$(GREEN)Deleting obs! ( ͡° ͜ʖ ͡°) $(NONE)\n"
 			$(RM) $(OBJS)
-			make -C ./libft clean
+			make -C $(LIBFT_DIR) clean
 
 
 fclean: 			
 			@echo "$(RED)Deleting EVERYTHING! ( ͡° ͜ʖ ͡°) $(NONE)\n"
 			$(RM) $(OBJS)
-			$(RM) pipex
-			@make fclean -C ./libft
+			$(RM) $(NAME)
+			@make fclean -C $(LIBFT_DIR)
 
 re:			fclean all
-
 
 party:
 			@printf "\033c"
