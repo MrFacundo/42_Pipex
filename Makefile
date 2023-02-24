@@ -20,7 +20,7 @@ MAGENTA=\033[35m
 
 # --- RULES ---
 .c.o:		%.o : %.c
-			$(CC) $(CFLAGS_PROD) $(HEADER) -c $< -o $(<:.c=.o)
+			$(CC) $(CFLAGS_DEV) $(HEADER) -c $< -o $(<:.c=.o)
 
 all: 		$(NAME)
 

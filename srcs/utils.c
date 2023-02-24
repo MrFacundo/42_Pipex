@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/16 17:04:28 by facundo          ###   ########.fr       */
+/*   Updated: 2023/02/24 16:49:57 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,51 +25,32 @@ void	close_pipe_ends(int pipe_fd[])
 	close(pipe_fd[1]);
 }
 
-// You are entering quotes hell
-
-static	size_t pipex_count_tokens(char const *s, char c)
+static size_t pipex_count_tokens(char const *s, char c)
 {
 	size_t count;
-
+	
 	count = 0;
-	while (*s)
+	while (*s) 
 	{
 		if (*s == c)
 			s++;
 		else
 		{
-			if (*s == '\'' && ++count)
-			{
+			if (*s == '\"' || *s == '\'')
+				s = ft_strrchr(s, *s);
+			count++;
+			while (*s && *s != c)
 				s++;
-				while (*s && *s != '\'')
-					s++;
-				if (*s == '\'')
-					s++;
-			}
-			if (*s == '\"' && ++count)
-			{
-				s++;
-				while (*s && *s != '\"')
-					s++;
-				if (*s == '\"')
-					s++;
-			}
-			else
-			{
-				count++;
-				while (*s && *s != c)
-					s++;
-			}
 		}
 	}
 	return (count);
 }
 
 // You are entering quotes hell, again
-
 char **ft_pipex_split(char const *s, char c)
 {
 	char **result;
+	char *s2;
 	size_t i;
 	size_t len;
 
@@ -83,27 +64,11 @@ char **ft_pipex_split(char const *s, char c)
 			s++;
 		else
 		{
-			if (*s && *s == '\'')
+			if (*s == '\'' || *s == '\"')
 			{
-				while (*s == '\'')
-					s++;
-				len = 2;
-				while (*s && *s != '\'' && ++len)
-					++s;
-				if (*s == '\'')
-					++s;
-				result[i++] = ft_substr(s - len, 0, len);
-			}
-			if (*s && *s == '\"')
-			{
-				while (*s == '\"')
-					s++;
-				len = 2;
-				while (*s && *s != '\"' && ++len)
-					++s;
-				if (*s == '\"')
-					++s;
-				result[i++] = ft_substr(s - len, 0, len);
+				s2 = ft_strrchr(s, *s);
+				result[i++] = ft_substr(++s, 0, s2 - s - 1);
+				s = ++s2;
 			}
 			if (*s && *s != '\'' && *s != '\"')
 			{
@@ -125,14 +90,6 @@ char	**parse_process_string(char *process_string)
 	char *temp;
 
 	argv = ft_pipex_split(process_string, ' ');
-	i = 0;
-	while (argv[i])
-	{
-		temp = ft_strtrim(argv[i], "\"\'");
-		ft_strlcpy(argv[i], temp, ft_strlen(temp) + 1);
-		i++;
-		free(temp);
-	}
 	return (argv);
 }
 
