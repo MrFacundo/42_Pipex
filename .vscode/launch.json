@@ -5,7 +5,7 @@
 			"name": "C/C++: Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"args": ["infile", "awk \\\"{count++} END {printf \\\"count: %i\\\" , count}\\\"", "wc -w", "outfile"],
+			"args": ["infile", "tests/script.sh", "wc", "outfile"],
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
 			"cwd": "${workspaceFolder}",
 			"environment": [],

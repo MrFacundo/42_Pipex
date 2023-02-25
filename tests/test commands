@@ -1,0 +1,5 @@
+ fsoares 6 
+ 
+ ./pipex infile "sed \"s/And/But/\"" "awk \"{count++} END {printf \"count: %i\" , count}\"" outfile
+
+ 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/24 16:49:57 by facundo          ###   ########.fr       */
+/*   Updated: 2023/02/25 19:04:53 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ char	**parse_process_string(char *process_string)
 	int i;
 	char *temp;
 
+	if (ft_strnstr(process_string, ".sh", ft_strlen(process_string)))
+	{
+		argv[0] = process_string;
+		return (argv);
+	}
 	argv = ft_pipex_split(process_string, ' ');
 	return (argv);
 }
@@ -99,6 +104,12 @@ char	*get_path(char *envp[], char *process)
 	char *path_string;
 	char *path;
 
+	if (ft_strnstr(process, ".sh", ft_strlen(process)))
+	{
+		if (!access(process, F_OK))
+			return(process);
+		error("ERR_CMD");
+	}
 	while (*envp && !ft_strnstr(*envp, "PATH=", 5))
 		envp++;
 	path_string = ft_substr(*envp, 5, ft_strlen(*envp) - 5);
