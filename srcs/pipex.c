@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/24 16:41:36 by facundo          ###   ########.fr       */
+/*   Updated: 2023/02/26 15:56:20 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	pipex(char *argv[], char *envp[])
 {
 	int		pipe_fd[2];
 	pid_t	pid;
+	char	*argtest;
 
+	argtest = argv[4];
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
 	pid = fork();
@@ -49,7 +51,9 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[])
 	int		infile_fd;
 	char	**argv_one;
 	char	*path;
+	char	*argtest;
 
+	argtest = argv[4];
 	infile_fd = open(argv[1], O_RDONLY, 0777);
 	if (infile_fd == -1)
 		error(ERR_INFILE);
@@ -66,7 +70,9 @@ void	process_two(char *argv[], char *envp[], int pipe_fd[])
 	int		outfile_fd;
 	char	**argv_two;
 	char	*path;
+	char	*argtest;
 
+	argtest = argv[4];
 	outfile_fd = open(argv[4], O_CREAT | O_TRUNC | O_RDWR, 0000664);
 	if (outfile_fd == -1)
 		error(ERR_OUTFILE);

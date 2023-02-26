@@ -5,7 +5,7 @@
 			"name": "C/C++: Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"args": ["infile", "tests/script.sh", "wc", "outfile"],
+			"args": ["infile", "tests/script space.sh", "wc", "outfile"],
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
 			"cwd": "${workspaceFolder}",
 			"environment": [],

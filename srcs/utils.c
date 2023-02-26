@@ -6,7 +6,7 @@
 /*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/25 19:04:53 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/02/26 17:52:59 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,38 @@ void	close_pipe_ends(int pipe_fd[])
 {
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
+}
+
+char	*escape_spaces(char *s)
+{
+	char	*ret;
+	size_t	count;
+	size_t	i;	
+	int length;
+	
+	count = 0;
+	length = ft_strlen(s) + count + 1;
+	i = 0;
+	while (s[i]) 
+	{
+		if (s[i] == ' ')
+			count++;
+		i++;
+	}
+	ret = malloc(length);
+	while (*s) 
+	{
+		if (*s == ' ')
+		{
+			*ret = '\\';
+			ret++;
+		}
+		*ret = *s;
+		ret++;
+		s++;
+	}
+
+	return (ret - length);
 }
 
 static size_t pipex_count_tokens(char const *s, char c)
@@ -88,11 +120,19 @@ char	**parse_process_string(char *process_string)
 	char **argv;
 	int i;
 	char *temp;
+	char	*argtest;
+	char	*bash;
+	char	**bash2;
 
 	if (ft_strnstr(process_string, ".sh", ft_strlen(process_string)))
 	{
-		argv[0] = process_string;
-		return (argv);
+		if (access(process_string, F_OK))
+			error("ERR_CMD");
+		bash2 = malloc(3);
+		bash2[0] = ft_strdup("bash");
+		bash2[1] = escape_spaces(process_string);
+		argtest = bash2[1];
+		return (bash2);
 	}
 	argv = ft_pipex_split(process_string, ' ');
 	return (argv);
@@ -104,12 +144,6 @@ char	*get_path(char *envp[], char *process)
 	char *path_string;
 	char *path;
 
-	if (ft_strnstr(process, ".sh", ft_strlen(process)))
-	{
-		if (!access(process, F_OK))
-			return(process);
-		error("ERR_CMD");
-	}
 	while (*envp && !ft_strnstr(*envp, "PATH=", 5))
 		envp++;
 	path_string = ft_substr(*envp, 5, ft_strlen(*envp) - 5);
