@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/26 17:52:59 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:15:29 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*escape_spaces(char *s)
 	int length;
 	
 	count = 0;
-	length = ft_strlen(s) + count + 1;
+	length = ft_strlen(s) + count;
 	i = 0;
 	while (s[i]) 
 	{
@@ -54,7 +54,7 @@ char	*escape_spaces(char *s)
 		s++;
 	}
 
-	return (ret - length);
+	return (ret - length - count);
 }
 
 static size_t pipex_count_tokens(char const *s, char c)

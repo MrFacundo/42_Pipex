@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/26 15:56:20 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/02/27 12:43:55 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[])
 	path = get_path(envp, argv_one[0]);
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	close_pipe_ends(pipe_fd);
+	argtest = argv_one[1];
+	argtest = argv[2];
 	execve(path, argv_one, envp);
+	printf("abcde");
 }
 
 void	process_two(char *argv[], char *envp[], int pipe_fd[])
@@ -79,7 +82,9 @@ void	process_two(char *argv[], char *envp[], int pipe_fd[])
 	dup2(outfile_fd, STDOUT_FILENO);
 	argv_two = parse_process_string(argv[3]);
 	path = get_path(envp, argv_two[0]);
-	dup2(pipe_fd[0], STDIN_FILENO);
+	if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+		error(ERR_OUTFILE);
 	close_pipe_ends(pipe_fd);
 	execve(path, argv_two, envp);
+	printf("abcde");
 }
