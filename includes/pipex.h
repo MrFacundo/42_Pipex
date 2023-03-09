@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:05:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/12 13:10:54 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/03/09 17:31:27 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define ERR_PIPE "Pipe"
 # define ERR_FORK "Pipe"
 # define ERR_CMD "Command not found\n"
+# define ERR_CHILD "Some error in child process\n"
+
 
 // pipex.c
 int		pipex(char *argv[], char *envp[]);

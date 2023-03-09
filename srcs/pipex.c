@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/02/27 12:43:55 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/09 17:33:37 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	pipex(char *argv[], char *envp[])
 	int		pipe_fd[2];
 	pid_t	pid;
 	char	*argtest;
+	int statusCode;
+	int wstatus;
 
 	argtest = argv[4];
 	if (pipe(pipe_fd) == -1)
@@ -41,8 +43,17 @@ int	pipex(char *argv[], char *envp[])
 		error(ERR_FORK);
 	if (pid == 0)
 		process_two(argv, envp, pipe_fd);
+	wait(&wstatus);
+	if (WIFEXITED(wstatus))
+		statusCode = WEXITSTATUS(wstatus);
+	if (statusCode)
+		error(ERR_PIPE);
+	wait(&wstatus);
+	if (WIFEXITED(wstatus))
+		statusCode = WEXITSTATUS(wstatus);
+	if (statusCode)
+		error(ERR_PIPE);
 	close_pipe_ends(pipe_fd);
-	wait(NULL);
 	return (0);
 }
 
