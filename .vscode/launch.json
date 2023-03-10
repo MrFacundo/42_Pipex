@@ -5,7 +5,7 @@
 			"name": "C/C++: Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"args": ["infile", "awk \\\"'{count++} END {print count}'\\\"", "wc", "outfile"],
+			"args": ["input", "fizzBuzz", "wc -l", "outfile"],
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
 			"cwd": "${workspaceFolder}",
 			"environment": [],

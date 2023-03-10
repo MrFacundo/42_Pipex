@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:05:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/09 17:31:27 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/10 10:40:34 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
 # include <unistd.h>	// close, read, write, access
 						// dup, dup2, execve, fork, pipe
 
-# define ERR_INFILE "Infile"
+# define ERR_INFILE "input"
 # define ERR_OUTFILE "Outfile"
 # define ERR_INPUT "Invalid number of arguments.\n"
-# define ERR_PIPE "Pipe"
-# define ERR_FORK "Pipe"
+# define ERR_PIPE "Pipe error"
+# define ERR_FORK "Fork error"
 # define ERR_CMD "Command not found\n"
 # define ERR_CHILD "Some error in child process\n"
 

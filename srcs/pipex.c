@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/09 17:33:37 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/10 11:13:44 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,36 +25,50 @@ int	main(int argc, char *argv[], char *envp[])
 int	pipex(char *argv[], char *envp[])
 {
 	int		pipe_fd[2];
-	pid_t	pid;
+	pid_t	pid1;
+	pid_t	pid2;
 	char	*argtest;
-	int statusCode;
+	int exit_code;
 	int wstatus;
+	int wpid;
+	int errno;
 
 	argtest = argv[4];
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
-	pid = fork();
-	if (pid == -1)
+	pid1 = fork();
+	if (pid1 == -1)
 		error(ERR_FORK);
-	if (pid == 0)
+	if (pid1 == 0)
 		process_one(argv, envp, pipe_fd);
-	pid = fork();
-	if (pid == -1)
+	pid2 = fork();
+	if (pid2 == -1)
 		error(ERR_FORK);
-	if (pid == 0)
+	if (pid2 == 0)
 		process_two(argv, envp, pipe_fd);
-	wait(&wstatus);
-	if (WIFEXITED(wstatus))
-		statusCode = WEXITSTATUS(wstatus);
-	if (statusCode)
-		error(ERR_PIPE);
-	wait(&wstatus);
-	if (WIFEXITED(wstatus))
-		statusCode = WEXITSTATUS(wstatus);
-	if (statusCode)
-		error(ERR_PIPE);
 	close_pipe_ends(pipe_fd);
-	return (0);
+	wpid = waitpid(pid1, &wstatus, 0);
+	// printf("wpid %d\n", wpid);
+	if (WIFEXITED(wstatus))
+		exit_code = WEXITSTATUS(wstatus);
+	// printf("exit_code %d\n", exit_code);
+	wpid = waitpid(pid2, &wstatus, 0);
+	// printf("wpid %d\n", wpid);
+	if (WIFEXITED(wstatus))
+		exit_code = WEXITSTATUS(wstatus);
+	// printf("exit_code %d\n", exit_code);
+
+	// wait(&wstatus);
+	// if (WIFEXITED(wstatus))
+	// 	statusCode = WEXITSTATUS(wstatus);
+	// if (statusCode)
+	// 	error(ERR_PIPE);
+	// wait(&wstatus);
+	// if (WIFEXITED(wstatus))
+	// 	statusCode = WEXITSTATUS(wstatus);
+	// if (statusCode)
+	// 	error(ERR_PIPE);
+	return (exit_code);
 }
 
 void	process_one(char *argv[], char *envp[], int pipe_fd[])
@@ -66,8 +80,10 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[])
 
 	argtest = argv[4];
 	infile_fd = open(argv[1], O_RDONLY, 0777);
-	if (infile_fd == -1)
+	if (infile_fd == -1) {
+	 	printf("%s: %s\n", __FILE__, strerror(errno));
 		error(ERR_INFILE);
+	}
 	dup2(infile_fd, STDIN_FILENO);
 	argv_one = parse_process_string(argv[2]);
 	path = get_path(envp, argv_one[0]);
