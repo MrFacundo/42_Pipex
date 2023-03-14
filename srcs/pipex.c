@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/10 11:13:44 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/14 09:06:15 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char *argv[], char *envp[])
 	if (argc == 5)
 		return (pipex(argv, envp));
 	else
-		error(ERR_INPUT);
+		error(ERR_ARGS);
 	return (0);
 }
 
@@ -27,13 +27,10 @@ int	pipex(char *argv[], char *envp[])
 	int		pipe_fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	char	*argtest;
 	int exit_code;
 	int wstatus;
 	int wpid;
-	int errno;
 
-	argtest = argv[4];
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
 	pid1 = fork();
@@ -48,7 +45,6 @@ int	pipex(char *argv[], char *envp[])
 		process_two(argv, envp, pipe_fd);
 	close_pipe_ends(pipe_fd);
 	wpid = waitpid(pid1, &wstatus, 0);
-	// printf("wpid %d\n", wpid);
 	if (WIFEXITED(wstatus))
 		exit_code = WEXITSTATUS(wstatus);
 	// printf("exit_code %d\n", exit_code);
@@ -57,17 +53,6 @@ int	pipex(char *argv[], char *envp[])
 	if (WIFEXITED(wstatus))
 		exit_code = WEXITSTATUS(wstatus);
 	// printf("exit_code %d\n", exit_code);
-
-	// wait(&wstatus);
-	// if (WIFEXITED(wstatus))
-	// 	statusCode = WEXITSTATUS(wstatus);
-	// if (statusCode)
-	// 	error(ERR_PIPE);
-	// wait(&wstatus);
-	// if (WIFEXITED(wstatus))
-	// 	statusCode = WEXITSTATUS(wstatus);
-	// if (statusCode)
-	// 	error(ERR_PIPE);
 	return (exit_code);
 }
 
@@ -76,12 +61,9 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[])
 	int		infile_fd;
 	char	**argv_one;
 	char	*path;
-	char	*argtest;
 
-	argtest = argv[4];
 	infile_fd = open(argv[1], O_RDONLY, 0777);
 	if (infile_fd == -1) {
-	 	printf("%s: %s\n", __FILE__, strerror(errno));
 		error(ERR_INFILE);
 	}
 	dup2(infile_fd, STDIN_FILENO);
@@ -89,10 +71,7 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[])
 	path = get_path(envp, argv_one[0]);
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	close_pipe_ends(pipe_fd);
-	argtest = argv_one[1];
-	argtest = argv[2];
 	execve(path, argv_one, envp);
-	printf("abcde");
 }
 
 void	process_two(char *argv[], char *envp[], int pipe_fd[])
@@ -100,9 +79,7 @@ void	process_two(char *argv[], char *envp[], int pipe_fd[])
 	int		outfile_fd;
 	char	**argv_two;
 	char	*path;
-	char	*argtest;
 
-	argtest = argv[4];
 	outfile_fd = open(argv[4], O_CREAT | O_TRUNC | O_RDWR, 0000664);
 	if (outfile_fd == -1)
 		error(ERR_OUTFILE);
@@ -113,5 +90,4 @@ void	process_two(char *argv[], char *envp[], int pipe_fd[])
 		error(ERR_OUTFILE);
 	close_pipe_ends(pipe_fd);
 	execve(path, argv_two, envp);
-	printf("abcde");
 }
