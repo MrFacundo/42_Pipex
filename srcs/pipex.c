@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/14 09:06:15 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/14 22:11:41 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,46 @@ int	main(int argc, char *argv[], char *envp[])
 
 int	pipex(char *argv[], char *envp[])
 {
-	int		pipe_fd[2];
+
+		int		pipe_fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	int exit_code;
-	int wstatus;
-	int wpid;
+	int		wpid;
+	int		wstatus;
+
+
+	if (pipe(pipe_fd) == -1)
+		error(ERR_PIPE);
+	printf("1: %d\n",pid1);
+	pid1 = fork();
+	printf("2: %d\n",pid1);
+	if (pid1 == -1)
+		error(ERR_FORK);
+	if (pid1 == 0)
+		process_one(argv, envp, pipe_fd);
+	printf("3: %d\n",pid1);
+	waitpid(pid1, &wstatus, 0);
+	printf("4: %d\n",pid1);
+	check_process_exit(wstatus);
+	printf("5: %d\n",pid1);
+	pid2 = fork();
+	printf("6: %d\n",pid2);
+	if (pid2 == -1)
+		error(ERR_FORK);
+	if (pid2 == 0)
+		process_two(argv, envp, pipe_fd);
+	close_pipe_ends(pipe_fd);
+	printf("7: %d, %d\n",pid2, wstatus);
+	waitpid(pid2, &wstatus, 0);
+	printf("8: %d, %d \n",pid2, wstatus);
+	/*check_process_exit(wstatus);*/
+	return (0);
+
+/*	int		pipe_fd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+	int		wstatus;
+	int		wpid;
 
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
@@ -41,20 +75,18 @@ int	pipex(char *argv[], char *envp[])
 	pid2 = fork();
 	if (pid2 == -1)
 		error(ERR_FORK);
-	if (pid2 == 0)
+	if (pid2 == 0)	
 		process_two(argv, envp, pipe_fd);
 	close_pipe_ends(pipe_fd);
 	wpid = waitpid(pid1, &wstatus, 0);
-	if (WIFEXITED(wstatus))
-		exit_code = WEXITSTATUS(wstatus);
-	// printf("exit_code %d\n", exit_code);
+	check_process_exit(wstatus);
 	wpid = waitpid(pid2, &wstatus, 0);
-	// printf("wpid %d\n", wpid);
-	if (WIFEXITED(wstatus))
-		exit_code = WEXITSTATUS(wstatus);
-	// printf("exit_code %d\n", exit_code);
-	return (exit_code);
+	// check_process_exit(wstatus);
+	return (0);
+	*/
 }
+
+
 
 void	process_one(char *argv[], char *envp[], int pipe_fd[])
 {

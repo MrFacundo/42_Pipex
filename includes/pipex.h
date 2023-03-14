@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:05:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/13 17:22:43 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/14 21:32:09 by ftroiter         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	process_one(char *argv[], char *envp[], int pipe_fd[]);
 void	process_two(char *argv[], char *envp[], int pipe_fd[]);
 
 // utils.c
+void	check_process_exit(int wstatus);
 void	error(char *err);
 void	close_pipe_ends(int pipe_fd[]);
 char	**parse_process_string(char	*process_string);

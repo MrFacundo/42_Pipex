@@ -5,7 +5,7 @@
 			"name": "C/C++: Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"args": ["input", "fizzBuzz", "wc -l", "outfile"],
+			"args": ["infilefile", "wc", "wc -l", "outfile"],
 			"program": "${fileDirname}/${fileBasenameNoExtension}",
 			"cwd": "${workspaceFolder}",
 			"environment": [],
