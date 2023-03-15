@@ -5,5 +5,9 @@
 		"pipex.h": "c",
 		"libft.h": "c",
 		"stdio.h": "c"
+	},
+	"editor.tokenColorCustomizations": {
+		"comments": "",
+		"textMateRules": []
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ftroiter <ftroiter@student.42.fr>          +#+  +:+       +#+        */
+/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/14 22:11:41 by ftroiter         ###   ########.fr       */
+/*   Updated: 2023/03/15 17:01:34 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[], char *envp[])
 int	pipex(char *argv[], char *envp[])
 {
 
-		int		pipe_fd[2];
+	int		pipe_fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
 	int		wpid;
@@ -34,29 +34,29 @@ int	pipex(char *argv[], char *envp[])
 
 	if (pipe(pipe_fd) == -1)
 		error(ERR_PIPE);
-	printf("1: %d\n",pid1);
+	// printf("1: %d\n",pid1);
 	pid1 = fork();
-	printf("2: %d\n",pid1);
+	// printf("2: %d\n",pid1);
 	if (pid1 == -1)
 		error(ERR_FORK);
 	if (pid1 == 0)
 		process_one(argv, envp, pipe_fd);
-	printf("3: %d\n",pid1);
+	// printf("3: %d\n",pid1);
 	waitpid(pid1, &wstatus, 0);
-	printf("4: %d\n",pid1);
-	check_process_exit(wstatus);
-	printf("5: %d\n",pid1);
+	// printf("4: %d\n",pid1);
+	check_process_exit(wstatus, 1);
+	// printf("5: %d\n",pid1);
 	pid2 = fork();
-	printf("6: %d\n",pid2);
+	// printf("6: %d\n",pid2);
 	if (pid2 == -1)
 		error(ERR_FORK);
 	if (pid2 == 0)
 		process_two(argv, envp, pipe_fd);
 	close_pipe_ends(pipe_fd);
-	printf("7: %d, %d\n",pid2, wstatus);
+	// printf("7: %d, %d\n",pid2, wstatus);
 	waitpid(pid2, &wstatus, 0);
-	printf("8: %d, %d \n",pid2, wstatus);
-	/*check_process_exit(wstatus);*/
+	// printf("8: %d, %d \n",pid2, wstatus);
+	check_process_exit(wstatus, 2);
 	return (0);
 
 /*	int		pipe_fd[2];
