@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/17 10:46:36 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/17 15:34:23 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,84 +24,8 @@ void	check_process_exit(int wstatus, int process)
 
 void	error(char *err)
 {
-	if (errno == 0)
-	{
-		write(2, err, ft_strlen(err));
-		exit(1);
-	}
 	perror(err);
 	exit(1);
-}
-
-void	close_pipe_ends(int pipe_fd[])
-{
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
-}
-
-static size_t	pipex_count_tokens(char const *s, char c)
-{
-	size_t	count;
-
-	count = 0;
-	while (*s)
-	{
-		if (*s == c)
-			s++;
-		else
-		{
-			if (*s == '\"' || *s == '\'')
-				s = ft_strrchr(s, *s);
-			count++;
-			while (*s && *s != c)
-				s++;
-		}
-	}
-	return (count);
-}
-
-char *get_quoted_string(char const **s, char c)
-{
-	char *s2;
-	char *ret;
-	size_t len;
-
-	s2 = ft_strrchr(*s, **s);
-	ret = ft_substr(++*s, 0, s2 - *s - 1);
-	*s = ++s2;
-	return (ret);
-}
-
-char *get_unquoted_string(char const **s, char c)
-{
-	size_t len;
-
-	len = 0;
-	while (**s && **s != c && ++len)
-		++*s;
-	return (ft_substr(*s - len, 0, len));
-}
-
-char **ft_pipex_split(char const *s, char c)
-{
-	char **result;
-	size_t i;
-
-	i = 0;
-	result = malloc(sizeof(char *) * (pipex_count_tokens(s, c) + 1));
-	if (!result || !s)
-		return (NULL);
-	while (*s)
-	{
-		if (*s == c)
-			s++;
-		else if (*s == '\'' || *s == '\"')
-			result[i++] = get_quoted_string(&s, c);
-		else
-			result[i++] = get_unquoted_string(&s, c);
-	}
-	result[i] = 0;
-	return (result);
 }
 
 char	**parse_script(char *process_string)
@@ -158,41 +82,3 @@ char	*get_path(char *envp[], char *process)
 		error("ERR_CMD");
 	return (path);
 }
-
-/* 
-char **ft_pipex_split(char const *s, char c)
-{
-	char **result;
-	char *s2;
-	size_t i;
-	size_t len;
-
-	i = 0;
-	result = malloc(sizeof(char *) * (pipex_count_tokens(s, c) + 1));
-	if (!result || !s)
-		return (NULL);
-	while (*s)
-	{
-		if (*s == c)
-			s++;
-		else
-		{
-			if (*s == '\'' || *s == '\"')
-			{
-				s2 = ft_strrchr(s, *s);
-				result[i++] = ft_substr(++s, 0, s2 - s - 1);
-				s = ++s2;
-			}
-			if (*s && *s != '\'' && *s != '\"')
-			{
-				len = 0;
-				while (*s && *s != c && ++len)
-					++s;
-				result[i++] = ft_substr(s - len, 0, len);
-			}
-		}
-	}
-	result[i] = 0;
-	return (result);
-}
- */
