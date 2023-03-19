@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:05:29 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/17 15:39:52 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/19 17:22:41 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define ERR_INFILE "In file"
 # define ERR_OUTFILE "Out file"
 # define ERR_PIPE "Pipe"
+# define ERR_PATH "No PATH found"
 # define ERR_FORK "Fork"
 # define ERR_CMD "Command"
 # define ERR_SCRIPT "Script"

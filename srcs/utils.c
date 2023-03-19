@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/17 15:34:23 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/19 17:50:27 by facu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,10 @@ void	error(char *err)
 
 char	**parse_script(char *process_string)
 {
-	char	**script_argv;
+	char	*script_argv[3];
 
 	if (access(process_string, F_OK))
 		error("ERR_SCRIPT");
-	script_argv = ft_calloc(3, 1);
-	if (!script_argv)
-		return (0);
 	script_argv[0] = ft_strdup("bash");
 	script_argv[1] = process_string;
 	return (script_argv);
@@ -63,11 +60,9 @@ char	*get_path(char *envp[], char *process)
 
 	while (*envp && !ft_strnstr(*envp, "PATH=", 5))
 		envp++;
-	path_string = ft_substr(*envp, 5, ft_strlen(*envp) - 5);
-	if (!path_string)
-		return (0);
-	paths = ft_split(path_string, ':');
-	free(path_string);
+	if (!*envp)
+		error("ERR_PATH");
+	paths = ft_split(*envp + 5, ':');
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, ft_strjoin("/", process));
