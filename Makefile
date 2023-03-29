@@ -20,14 +20,14 @@ MAGENTA=\033[35m
 
 # --- RULES ---
 .c.o:		%.o : %.c
-			$(CC) $(CFLAGS_DEV) $(HEADER) -c $< -o $(<:.c=.o)
+			$(CC) $(CFLAGS_PROD) $(HEADER) -c $< -o $(<:.c=.o)
 
 all: 		$(NAME)
 
 $(NAME):	$(OBJS)
 			@echo  "$(GRAY)----Compiling Libft----$(NONE)"
 			make -C $(LIBFT_DIR)
-			@echo  "$(GRAY)----Compiling Pipex----$(NONE)"
+			@echo  "$(GRAY)----Compiling $(NAME)----$(NONE)"
 			$(CC) $(OBJS) -Llibft -lft -o $(NAME)
 			@echo "$(GREEN)Pipex Compiled! ᕦ($(RED)♥$(GREEN)_$(RED)♥$(GREEN))ᕤ$(NONE)\n"
 
@@ -59,4 +59,4 @@ party:
 			@printf "\033c"
 			@echo "$(YELLOW)♪┗(・o･)┓♪\n"
 
-.PHONY: all clean fclean re re_bonus bonus party
+.PHONY: all clean fclean re party

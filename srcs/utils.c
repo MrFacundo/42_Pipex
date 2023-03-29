@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: facu <facu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:03:55 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/19 17:50:27 by facu             ###   ########.fr       */
+/*   Updated: 2023/03/29 14:12:34 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	error(char *err)
 
 char	**parse_script(char *process_string)
 {
-	char	*script_argv[3];
+	char	**script_argv;
 
+	script_argv = ft_calloc(3, 1);
 	if (access(process_string, F_OK))
 		error("ERR_SCRIPT");
 	script_argv[0] = ft_strdup("bash");
@@ -42,9 +43,6 @@ char	**parse_script(char *process_string)
 char	**parse_process_string(char *process_string)
 {
 	char	**argv;
-	char	*temp;
-	char	*bash;
-	char	**script_argv;
 
 	if (ft_strnstr(process_string, ".sh", ft_strlen(process_string)))
 		return (parse_script(process_string));
@@ -55,7 +53,6 @@ char	**parse_process_string(char *process_string)
 char	*get_path(char *envp[], char *process)
 {
 	char	**paths;
-	char	*path_string;
 	char	*path;
 
 	while (*envp && !ft_strnstr(*envp, "PATH=", 5))

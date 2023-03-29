@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 14:37:33 by facundo           #+#    #+#             */
-/*   Updated: 2023/03/17 15:39:35 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:47:46 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ static size_t	count_tokens(char const *s, char c)
 	return (count);
 }
 
-char	*get_quoted_string(char const **s, char c)
+char	*get_quoted_string(char const **s)
 {
 	char	*s2;
 	char	*ret;
-	size_t	len;
 
 	s2 = ft_strrchr(*s, **s);
-	ret = ft_substr(++*s, 0, s2 - *s - 1);
+	++*s;
+	ret = ft_substr(*s, 0, s2 - *s);
 	*s = ++s2;
 	return (ret);
 }
@@ -70,7 +70,7 @@ char	**ft_pipex_split(char const *s, char c)
 		if (*s == c)
 			s++;
 		else if (*s == '\'' || *s == '\"')
-			result[i++] = get_quoted_string(&s, c);
+			result[i++] = get_quoted_string(&s);
 		else
 			result[i++] = get_unquoted_string(&s, c);
 	}

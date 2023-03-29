@@ -6,7 +6,7 @@
 /*   By: facundo <facundo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 12:40:38 by ftroiter          #+#    #+#             */
-/*   Updated: 2023/03/17 15:37:59 by facundo          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:05:17 by facundo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	pipex(char *argv[], char *envp[])
 	int		pipe_fd[2];
 	pid_t	pid1;
 	pid_t	pid2;
-	int		wpid;
 	int		wstatus;
 
 	if (pipe(pipe_fd) == -1)
